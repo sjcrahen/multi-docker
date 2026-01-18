@@ -25,14 +25,14 @@ jobs:
 
             - name: Build production images
               run: |
-                docker build -t sjcrahen/multi-client ./client
-                docker build -t sjcrahen/multi-nginx ./nginx
-                docker build -t sjcrahen/multi-server ./server
-                docker build -t sjcrahen/multi-worker ./worker
+                docker build -t scrahen/multi-client ./client
+                docker build -t scrahen/multi-nginx ./nginx
+                docker build -t scrahen/multi-server ./server
+                docker build -t scrahen/multi-worker ./worker
 
             - name: Push production images
               run: |
-                docker push sjcrahen/multi-client
-                docker push sjcrahen/multi-nginx
-                docker push sjcrahen/multi-server
-                docker push sjcrahen/multi-worker
+                docker push scrahen/multi-client
+                docker push scrahen/multi-nginx
+                docker push scrahen/multi-server
+                docker push scrahen/multi-worker
