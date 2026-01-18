@@ -1,0 +1,38 @@
+name: Deploy MultiDocker
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Login Docker
+              uses: docker/login-action@v3
+              with: 
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+
+            - name: Build test image
+              run: docker build -t react-test -f ./client/Dockerfile.dev ./client
+
+            - name: Run tests
+              run: docker run -e CI=true react-test npm test --watch=false
+
+            - name: Build production images
+              run: |
+                docker build -t sjcrahen/multi-client ./client
+                docker build -t sjcrahen/multi-nginx ./nginx
+                docker build -t sjcrahen/multi-server ./server
+                docker build -t sjcrahen/multi-worker ./worker
+
+            - name: Push production images
+              run: |
+                docker push sjcrahen/multi-client
+                docker push sjcrahen/multi-nginx
+                docker push sjcrahen/multi-server
+                docker push sjcrahen/multi-worker
